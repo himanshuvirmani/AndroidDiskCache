@@ -1,16 +1,16 @@
-apply plugin: 'android-library'
+apply plugin: 'com.android.library'
 
 repositories {
 	mavenCentral()
 }
 
 android {
-	compileSdkVersion 19
-	buildToolsVersion "19.1.0"
+	compileSdkVersion 21
+	buildToolsVersion "22.0.1"
 
 	defaultConfig {
 		minSdkVersion 8
-		targetSdkVersion 19
+		targetSdkVersion 21
 		versionCode 1
 		versionName "1.0"
 	}
@@ -23,7 +23,7 @@ version = '0.0.18-SNAPSHOT'
 project.ext.description = "A simple cache for your objects."
 
 dependencies {
-	compile 'com.google.code.gson:gson:2.2.4'
+	compile 'com.google.code.gson:gson:2.3'
 	compile 'com.jakewharton:disklrucache:2.0.2'
 }
 
