@@ -1,17 +1,10 @@
-# ObjectCache
-
-No matter what application I work on, sooner or later I'm stuck with the situation where I've spent time building an Object (commonly by retrieving it from a remote REST API) and I know the result of that work is valid for some period of time.
-
-Luckily, thanks to the awesome work of some other Open Source developers, cacheing that work in Java is easy.
-Let this library wrap the work involved in doing so up for you, so you can get back to building the parts of your application that matter.
+# Android Disk Cache
 
 ## Introduction
 
-Simply put, this library creates both a long-lived, on-disk (using the outstanding [DiskLruCache](https://github.com/JakeWharton/DiskLruCache) library) of JSON representations of your Objects (using the superb [GSON](https://code.google.com/p/google-gson/) library) and an in-memory, runtime cache of your Objects. You can optionally specify a time when those cache entries expire, and the goodness of cache-rush-mitigation is baked right into the crust.
+Android disk cache is an LRU based Disk Cache which saves your android pojo/data objects in a key value format. It uses the outstanding [DiskLruCache](https://github.com/JakeWharton/DiskLruCache) library) of JSON representations of your Objects (using the superb [GSON](https://code.google.com/p/google-gson/) library) and an in-memory, runtime cache of your Objects. You can optionally specify a time when those cache entries expire, and the goodness of cache-rush-mitigation is baked right into the crust.
 
-Original credit for the base of this project goes out to [anupcowkur/Reservoir](https://github.com/anupcowkur/Reservoir), but my application required a slightly more specific implementation.
-
-*NOTE:* Consider this untested.
+Original credit for the base of this project goes out to [iainconnor/ObjectCache](https://github.com/iainconnor/ObjectCache). This project did most things right but did not use enough Java Generics standard to make it easy to use and integrate with your project. Also added is the debug logs to help you test and identify if you are going in the right direction and are getting the desired results from cache.
 
 ## Installing in Gradle
 
@@ -47,7 +40,7 @@ First, you'll need to create an instance of `DiskCache ( File cacheDirectory, in
 String cachePath = context.getCacheDir().getPath();
 File cacheFile = new File(cachePath + File.separator + BuildConfig.PACKAGE_NAME);
 
-DiskCache diskCache = new DiskCache(cacheFile, BuildConfig.VERSION_CODE, 1024 * 1024 * 10);
+Cache diskCache = new DiskCache(cacheFile, BuildConfig.VERSION_CODE, 1024 * 1024 * 10);
 ```
 
 Then create an instance of the `CacheManager` singleton;
@@ -69,8 +62,7 @@ cacheManager.put("myKeyExpiry", myExpiryObject, CacheManager.ExpiryTimes.ONE_WEE
 And retrieve it;
 
 ``` java
-Type myObjectType = new TypeToken<MyObject>(){}.getType();
-MyObject myObject = cacheManager.get("myKey", MyObject.class, myObjectType);
+MyObject myObject = cacheManager.get("myKey", MyObject.class);
 if ( myObject != null ) {
 	// Object was found!
 } else {
@@ -118,6 +110,9 @@ If you want to clear the cache manually, you can use;
 diskCache.clearCache();
 ```
 
+## ToDo
+To add in-memory cache option for cases where you do not want to maintain data in disk.
+
 ## Contact
 
-Love it? Hate it? Want to make changes to it? Contact me at [@iainconnor](http://www.twitter.com/iainconnor) or [iainconnor@gmail.com](mailto:iainconnor@gmail.com).
+Would love to hear from your for any suggestions and extensions to this. [himanshuvirmani@gmail.com](mailto:himanshuvirmani@gmail.com). 
