@@ -3,7 +3,6 @@ package com.himanshu.androidcache;
 import android.os.AsyncTask;
 import android.util.Log;
 import com.google.gson.Gson;
-import com.iainconnor.objectcache.BuildConfig;
 import java.io.IOException;
 import java.util.HashMap;
 

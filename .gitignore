@@ -33,3 +33,6 @@ local.properties
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+#gpg conf
+.gnupg

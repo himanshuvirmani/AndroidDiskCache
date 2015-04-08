@@ -27,15 +27,4 @@ dependencies {
 	compile 'com.jakewharton:disklrucache:2.0.2'
 }
 
-uploadArchives {
-	repositories {
-		mavenDeployer {
-			pom.project {
-				name project.getName()
-				description project.ext.description
-			}
-			repository url: 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
-			repository url: 'file://' + new File("./maven").absolutePath
-		}
-	}
-}
+apply from: 'mvn-push.gradle'
