@@ -18,8 +18,8 @@ android {
 
 apply plugin: 'maven'
 
-group = 'com.iainconnor'
-version = '0.0.18-SNAPSHOT'
+group = 'com.himanshu'
+version = '0.0.1-SNAPSHOT'
 project.ext.description = "A simple cache for your objects."
 
 dependencies {

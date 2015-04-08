@@ -1,4 +1,4 @@
-package com.iainconnor.objectcache;
+package com.himanshu.androidcache;
 
 class CachedObject {
   private int expiryTimeSeconds;
