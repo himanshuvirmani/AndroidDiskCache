@@ -1,17 +1,21 @@
 package com.himanshu.androidcache;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import com.google.gson.Gson;
+import com.iainconnor.objectcache.BuildConfig;
 import java.io.IOException;
 import java.util.HashMap;
 
 public class CacheManager {
   private final static int CACHE_RUSH_SECONDS = 60 * 2;
+  private static final String TAG = CacheManager.class.getSimpleName();
   private static CacheManager ourInstance;
-  private DiskCache diskCache;
+  private Cache diskCache;
   private HashMap<String, CachedObject> runtimeCache;
+  private boolean isDebug;
 
-  public static CacheManager getInstance(DiskCache diskCache) {
+  public static CacheManager getInstance(Cache diskCache) {
     if (ourInstance == null) {
       ourInstance = new CacheManager(diskCache);
     }
@@ -19,9 +23,14 @@ public class CacheManager {
     return ourInstance;
   }
 
-  private CacheManager(DiskCache diskCache) {
+  private CacheManager(Cache diskCache) {
+    if(BuildConfig.DEBUG ) Log.d(TAG, "CacheManager initiating:");
     this.diskCache = diskCache;
     runtimeCache = new HashMap<>();
+  }
+
+  public void setDebug(boolean isDebug) {
+    this.isDebug = isDebug;
   }
 
   public boolean exists(String key) {
@@ -29,6 +38,7 @@ public class CacheManager {
 
     try {
       result = diskCache.contains(key);
+      if(BuildConfig.DEBUG || isDebug) Log.d(TAG, "CacheManager: key exists? :" + result);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -38,6 +48,8 @@ public class CacheManager {
 
   public <T> Result<T> get(String key, Class objectClass) {
     Result<T> result = null;
+
+    if(BuildConfig.DEBUG || isDebug) Log.d(TAG, "CacheManager: get :" + key);
     try {
       result = getObject(key, objectClass);
     } catch (IOException e) {
@@ -51,11 +63,13 @@ public class CacheManager {
     T result = null;
     boolean isExpired = false;
 
+    if(BuildConfig.DEBUG || isDebug) Log.d(TAG, "CacheManager: getObject :" + key);
+
     CachedObject runtimeCachedObject = runtimeCache.get(key);
     if (runtimeCachedObject != null && !runtimeCachedObject.isExpired()) {
-      result = (T)new Gson().fromJson(runtimeCachedObject.getPayload(), objectClass);
+      result = (T) new Gson().fromJson(runtimeCachedObject.getPayload(), objectClass);
     } else if (runtimeCachedObject != null && runtimeCachedObject.isSoftExpired()) {
-      result = (T)new Gson().fromJson(runtimeCachedObject.getPayload(), objectClass);
+      result = (T) new Gson().fromJson(runtimeCachedObject.getPayload(), objectClass);
       isExpired = true;
     } else {
       String json = diskCache.getValue(key);
@@ -63,30 +77,32 @@ public class CacheManager {
         CachedObject cachedObject = new Gson().fromJson(json, CachedObject.class);
         if (!cachedObject.isExpired()) {
           runtimeCache.put(key, cachedObject);
-          result = (T)new Gson().fromJson(cachedObject.getPayload(), objectClass);
+          result = (T) new Gson().fromJson(cachedObject.getPayload(), objectClass);
         } else {
           if (cachedObject.isSoftExpired()) {
             result = (T) new Gson().fromJson(cachedObject.getPayload(), objectClass);
           }
-
+          isExpired = true;
           // To avoid cache rushing, we insert the value back in the cache with a longer expiry
           // Presumably, whoever received this expiration result will have inserted a fresh value by now
           putAsync(key, new Gson().fromJson(cachedObject.getPayload(), objectClass),
               CACHE_RUSH_SECONDS, false, new PutCallback() {
-            @Override
-            public void onSuccess() {
+                @Override
+                public void onSuccess() {
 
-            }
+                }
 
-            @Override
-            public void onFailure(Exception e) {
+                @Override
+                public void onFailure(Exception e) {
 
-            }
-          });
+                }
+              });
         }
       }
     }
-    return new Result<>(result,isExpired);
+    Result res = new Result<>(result, isExpired);
+    if(BuildConfig.DEBUG || isDebug) Log.d(TAG, "CacheManager: getObject :<result, isExpired>: " + res.toString());
+    return res;
   }
 
   public <T> void getAsync(String key, Class objectClass, GetCallback<T> getCallback) {
@@ -107,6 +123,8 @@ public class CacheManager {
 
   public boolean put(String key, Object object, int expiryTimeSeconds, boolean allowSoftExpiry) {
     boolean result = false;
+
+    if(BuildConfig.DEBUG || isDebug) Log.d(TAG, "CacheManager Put:" + key);
 
     try {
       putObject(key, object, expiryTimeSeconds, allowSoftExpiry);
@@ -232,6 +250,8 @@ public class CacheManager {
 
   private void putObject(String key, Object payload, int expiryTimeSeconds, boolean allowSoftExpiry)
       throws Exception {
+    if(BuildConfig.DEBUG || isDebug) Log.d(TAG, "CacheManager putObject:" + key + ":" + payload.toString());
+
     String payloadJson = new Gson().toJson(payload);
     CachedObject cachedObject = new CachedObject(payloadJson, expiryTimeSeconds, allowSoftExpiry);
     String json = new Gson().toJson(cachedObject);

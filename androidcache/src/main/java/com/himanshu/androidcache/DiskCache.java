@@ -10,7 +10,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class DiskCache {
+public class DiskCache implements Cache{
   private final String HASH_ALGORITHM = "MD5";
   private final String STRING_ENCODING = "UTF-8";
   private final int DEFAULT_CACHE_SIZE = 1024 * 1024 * 10;
@@ -33,6 +33,7 @@ public class DiskCache {
         cacheSizeKb <= 0 ? DEFAULT_CACHE_SIZE : cacheSizeKb);
   }
 
+  @Override
   public String getValue(String key) throws IOException {
     String value = null;
     DiskLruCache.Snapshot snapshot = null;
@@ -53,6 +54,7 @@ public class DiskCache {
     return value;
   }
 
+  @Override
   public boolean contains(String key) throws IOException {
     boolean found = false;
     DiskLruCache.Snapshot snapshot = null;
@@ -71,6 +73,7 @@ public class DiskCache {
     return found;
   }
 
+  @Override
   public void setKeyValue(String key, String value) throws IOException {
     DiskLruCache.Editor editor = null;
     try {
@@ -94,6 +97,7 @@ public class DiskCache {
     }
   }
 
+  @Override
   public void clearCache() throws IOException {
     diskLruCache.delete();
     //Open the cache again to use the new empty cache
