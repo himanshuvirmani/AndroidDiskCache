@@ -1,29 +1,29 @@
 package com.himanshu.androidcache;
 
 public class Result<T> {
-  T object;
-  boolean isExpired;
+  T cacheObject;
+  boolean expired;
 
   public Result(T object) {
-    this.object = object;
+    this.cacheObject = object;
   }
 
   public Result(T object, boolean isExpired) {
-    this.object = object;
-    this.isExpired = isExpired;
+    this.cacheObject = object;
+    this.expired = isExpired;
   }
 
-  public T getObject() {
-    return object;
+  public T getCachedObject() {
+    return cacheObject;
   }
 
-  public boolean getIsExpired() {
-    return isExpired;
+  public boolean isExpired() {
+    return expired;
   }
 
   @Override public String toString() {
-    final StringBuilder result = new StringBuilder("Cache is expired : " + isExpired);
-    if (object != null) result.append(" Cache Object : " + object.toString());
+    final StringBuilder result = new StringBuilder("Cache is expired : " + expired);
+    if (cacheObject != null) result.append(" Cache Object : " + cacheObject.toString());
     return result.toString();
   }
 }

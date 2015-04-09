@@ -14,13 +14,20 @@ android {
 		versionCode 1
 		versionName "1.0"
 	}
+
+  android.libraryVariants.all { variant ->
+    def name = variant.buildType.name
+    if (name.equals(com.android.builder.core.BuilderConstants.DEBUG)) {
+      return; // Skip debug builds.
+    }
+    def task = project.tasks.create "jar${name.capitalize()}", Jar
+    task.dependsOn variant.javaCompile
+    task.from variant.javaCompile.destinationDir
+    artifacts.add('archives', task);
+  }
 }
 
 apply plugin: 'maven'
-
-group = 'com.himanshu'
-version = '0.0.1-SNAPSHOT'
-project.ext.description = "A simple cache for your objects."
 
 dependencies {
 	compile 'com.google.code.gson:gson:2.3'
