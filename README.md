@@ -94,7 +94,7 @@ cacheManager.putAsync("myKeyExpiry", myExpiryObject, CacheManager.ExpiryTimes.ON
     }
 });
 
-cacheManager.getAsync("myKeyExpiry", myExpiryObject.class, new GetCallback<ExpiryObject>() {
+cacheManager.getAsync("myKeyExpiry", ExpiryObject.class, new GetCallback<ExpiryObject>() {
     @Override
     public void onSuccess ( Result<ExpiryObject> myObject ) {
 	if ( myObject.getCachedObject() != null ) {
