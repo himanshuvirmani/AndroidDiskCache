@@ -46,7 +46,7 @@ public class CacheManager {
     return result;
   }
 
-  public <T> Result<T> get(String key, Class objectClass) {
+  public <T> Result<T> get(String key, Class<T> objectClass) {
     Result<T> result = null;
 
     if(BuildConfig.DEBUG || isDebug) Log.d(TAG, "CacheManager: get :" + key);
@@ -105,7 +105,7 @@ public class CacheManager {
     return res;
   }
 
-  public <T> void getAsync(String key, Class objectClass, GetCallback<T> getCallback) {
+  public <T> void getAsync(String key, Class<T> objectClass, GetCallback<T> getCallback) {
     new GetAsyncTask<T>(key, objectClass, getCallback).execute();
   }
 
