@@ -1,4 +1,4 @@
-package com.himanshu.androidcache;
+package com.himanshuvirmani.androidcache;
 
 import com.jakewharton.disklrucache.DiskLruCache;
 import java.io.BufferedOutputStream;
@@ -10,7 +10,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class DiskCache implements Cache{
+public class DiskCache implements Cache {
   private final String HASH_ALGORITHM = "MD5";
   private final String STRING_ENCODING = "UTF-8";
   private final int DEFAULT_CACHE_SIZE = 1024 * 1024 * 10;

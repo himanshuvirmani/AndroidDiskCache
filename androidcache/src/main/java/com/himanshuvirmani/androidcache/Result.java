@@ -1,4 +1,4 @@
-package com.himanshu.androidcache;
+package com.himanshuvirmani.androidcache;
 
 public class Result<T> {
   T cacheObject;

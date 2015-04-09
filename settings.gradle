@@ -1,1 +1,1 @@
-include ':androidcache'
+include ':androidcache', ':androidcache-sample'
