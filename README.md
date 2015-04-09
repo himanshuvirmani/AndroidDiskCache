@@ -13,40 +13,48 @@ Original credit for the base of this project goes out to [iainconnor/ObjectCache
 	``` groovy
 	repositories {
 		mavenCentral()
-    	maven {
-        	url 'https://raw.github.com/iainconnor/ObjectCache/master/maven/'
-    	}
 	}
 	```
 2. And add the dependency;
 
 	``` groovy
 	dependencies {
-		compile 'com.iainconnor:objectcache:0.0.18-SNAPSHOT'
+		compile 'com.himanshuvirmani:androidcache:1.0.0'
 	}
 	```
 
 ## Installing in other build tools
 
-1. Download the `.jar` for the latest version [from this repository](https://github.com/iainconnor/ObjectCache/tree/master/maven/com/iainconnor/objectcache).
+1. Download the `.jar` for the latest version [from this repository](https://oss.sonatype.org/content/groups/public/com/himanshuvirmani/androidcache/).
 2. Add it to your project.
 3. If you're building for Android, beg your boss to give you the time to switch to Gradle.
 
 ## Usage
 
-First, you'll need to create an instance of `DiskCache ( File cacheDirectory, int appVersion, int cacheSizeKb )`. For an Android application, this is simple;
+First, you'll need to create an instance of global cache manager instance in your application class `DiskCache ( File cacheDirectory, int appVersion, int cacheSizeKb )`. For an Android application, this is simple;
 
 ``` java
-String cachePath = context.getCacheDir().getPath();
-File cacheFile = new File(cachePath + File.separator + BuildConfig.PACKAGE_NAME);
+  private void prepareCache() {
+    final String cachePath = getCacheDir().getPath();
+    final File cacheFile = new File(cachePath + File.separator + BuildConfig.APPLICATION_ID);
+    try {
+      Cache diskCache = new DiskCache(cacheFile, BuildConfig.VERSION_CODE, CACHE_SIZE);
+      cacheManager = CacheManager.getInstance(diskCache);
+      cacheManager.setDebug(true); //Do this if you want to see logs from cachemanager
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
-Cache diskCache = new DiskCache(cacheFile, BuildConfig.VERSION_CODE, 1024 * 1024 * 10);
+  public static CacheManager getCacheManager() {
+    return cacheManager;
+  }
 ```
 
-Then create an instance of the `CacheManager` singleton;
+You can get the `CacheManager` singleton instance by creating a getter in Application class;
 
 ``` java
-CacheManager cacheManager = CacheManager.getInstance(diskCache);
+CacheManager cacheManager = MainApplication.getCacheManager();
 ```
 
 Insert an Object to be cached;
@@ -86,14 +94,17 @@ cacheManager.putAsync("myKeyExpiry", myExpiryObject, CacheManager.ExpiryTimes.ON
     }
 });
 
-cacheManager.getAsync("myKeyExpiry", myExpiryObject.class, myExpiryObjectType, new GetCallback() {
+cacheManager.getAsync("myKeyExpiry", myExpiryObject.class, new GetCallback<ExpiryObject>() {
     @Override
-    public void onSuccess ( ExpiryObject myObject ) {
-		if ( myObject != null ) {
+    public void onSuccess ( Result<ExpiryObject> myObject ) {
+	if ( myObject.getCachedObject() != null ) {
         	// Object was found!
         } else {
-        	// Object was not found, or was expired.
-        	// You should re-generate it and trigger a `.put()`.
+        	if ( myObject.isExpired()) {
+        	    // Object is expired
+        	} else {
+        	    // Object was never added to cache.
+        	}
         }
     }
 
