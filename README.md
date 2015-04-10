@@ -25,7 +25,7 @@ Original credit for the base of this project goes out to [iainconnor/ObjectCache
 
 ## Installing in other build tools
 
-1. Download the `.jar` for the latest version [from this repository](https://oss.sonatype.org/content/groups/public/com/himanshuvirmani/androidcache/).
+1. Download the `.jar` for the latest version [from this repository](https://search.maven.org/remote_content?g=com.himanshuvirmani&a=androidcache&v=LATEST).
 2. Add it to your project.
 3. If you're building for Android, beg your boss to give you the time to switch to Gradle.
 
@@ -94,7 +94,7 @@ cacheManager.putAsync("myKeyExpiry", myExpiryObject, CacheManager.ExpiryTimes.ON
     }
 });
 
-cacheManager.getAsync("myKeyExpiry", myExpiryObject.class, new GetCallback<ExpiryObject>() {
+cacheManager.getAsync("myKeyExpiry", ExpiryObject.class, new GetCallback<ExpiryObject>() {
     @Override
     public void onSuccess ( Result<ExpiryObject> myObject ) {
 	if ( myObject.getCachedObject() != null ) {
