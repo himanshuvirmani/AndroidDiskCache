@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Cache plays an important role in android as there is a crunch of memory and consistent network connectivity on mobile device. Hitting the server again and again for the rarely changing data also takes a toll on server resources. No one likes to see loading icon till the data is being fetched from server. AndroidDiskCache library works towards making your job easy when working towards resolving above mentioned use cases.
+Cache plays an important role in android as there is a crunch of memory and consistent network connectivity on mobile device. Hitting server again and again for the rarely changing data also takes a toll on server resources. No one likes to see loading icon till the data is being fetched from server. AndroidDiskCache library is there to make your job easy when working towards resolving above mentioned use cases.
 
 Android disk cache is an LRU based Disk Cache which persists your android pojo/data objects in a key value format in your phone's internal memory. It uses the outstanding [DiskLruCache](https://github.com/JakeWharton/DiskLruCache) library) of JSON representations of your Objects (using the superb [GSON](https://code.google.com/p/google-gson/) library) and an in-memory, runtime cache of your Objects. You can optionally specify a time when those cache entries expire, and the goodness of cache-rush-mitigation is baked right into the crust.
 
