@@ -2,7 +2,9 @@
 
 ## Introduction
 
-Android disk cache is an LRU based Disk Cache which saves your android pojo/data objects in a key value format. It uses the outstanding [DiskLruCache](https://github.com/JakeWharton/DiskLruCache) library) of JSON representations of your Objects (using the superb [GSON](https://code.google.com/p/google-gson/) library) and an in-memory, runtime cache of your Objects. You can optionally specify a time when those cache entries expire, and the goodness of cache-rush-mitigation is baked right into the crust.
+Cache plays an important role in android as there is a crunch of memory and consistent network connectivity on mobile device. Hitting the server again and again for the rarely changing data also takes a toll on server resources. No one likes to see loading icon till the data is being fetched from server. AndroidDiskCache library works towards making your job easy when working towards resolving above mentioned use cases.
+
+Android disk cache is an LRU based Disk Cache which persists your android pojo/data objects in a key value format in your phone's internal memory. It uses the outstanding [DiskLruCache](https://github.com/JakeWharton/DiskLruCache) library) of JSON representations of your Objects (using the superb [GSON](https://code.google.com/p/google-gson/) library) and an in-memory, runtime cache of your Objects. You can optionally specify a time when those cache entries expire, and the goodness of cache-rush-mitigation is baked right into the crust.
 
 Original credit for the base of this project goes out to [iainconnor/ObjectCache](https://github.com/iainconnor/ObjectCache). This project did most things right but did not use enough Java Generics standard to make it easy to use and integrate with your project. Also added is the debug logs to help you test and identify if you are going in the right direction and are getting the desired results from cache.
 
@@ -19,7 +21,7 @@ Original credit for the base of this project goes out to [iainconnor/ObjectCache
 
 	``` groovy
 	dependencies {
-		compile 'com.himanshuvirmani:androidcache:1.0.0'
+		compile 'com.himanshuvirmani:androidcache:1.0.1'
 	}
 	```
 
@@ -126,4 +128,4 @@ To add in-memory cache option for cases where you do not want to maintain data i
 
 ## Contact
 
-Would love to hear from your for any suggestions and extensions to this. [himanshuvirmani@gmail.com](mailto:himanshuvirmani@gmail.com). 
+Would love to hear from you for any suggestions and extensions to this. [himanshuvirmani@gmail.com](mailto:himanshuvirmani@gmail.com). 
