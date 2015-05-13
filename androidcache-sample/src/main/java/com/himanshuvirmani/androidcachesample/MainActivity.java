@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import com.himanshuvirmani.androidcache.CacheManager;
 import com.himanshuvirmani.androidcache.GetCallback;
+import com.himanshuvirmani.androidcache.PutCallback;
 import com.himanshuvirmani.androidcache.Result;
 
 public class MainActivity extends ActionBarActivity {
@@ -24,8 +25,20 @@ public class MainActivity extends ActionBarActivity {
   private void setDummyDataToCache() {
     CacheManager cacheManager = MainApplication.getCacheManager();
     // we can also dp a put async here
-    cacheManager.put("dummy","Hello World!",CacheManager.ExpiryTimes.ONE_HOUR.asSeconds(),true);
+    cacheManager.put("dummy","Hello World!", String.class, CacheManager.ExpiryTimes.ONE_HOUR.asSeconds(),true);
+
     Toast.makeText(this,"Storing data to cache : - " + "Hello World!", Toast.LENGTH_LONG).show();
+
+    cacheManager.putAsync("dummyasync", "Hello World async!", String.class,
+        CacheManager.ExpiryTimes.ONE_HOUR.asSeconds(), true, new PutCallback() {
+          @Override public void onSuccess() {
+            Toast.makeText(MainActivity.this,"Storing data to cache Async: - " + "Hello World async!", Toast.LENGTH_LONG).show();
+          }
+
+          @Override public void onFailure(Exception e) {
+
+          }
+        });
   }
 
   private void fetchDataFromCache() {
